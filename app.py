@@ -71,10 +71,14 @@ if authenticate(password):
                     for url in urls:
                         st.write(f"- [{url}]({url})")
                     
-                    # 検索結果をCSVに変換してダウンロードボタンを追加
-                    csv_data = pd.DataFrame({"URL": urls})
+                    # 検索キーワードを先頭行に含める
                     csv_buffer = io.StringIO()
-                    csv_data.to_csv(csv_buffer, index=False)
+                    
+                    # キーワード情報を先頭に書き込み、URLをそのまま改行区切りで追加
+                    csv_buffer.write(f"検索キーワード: {', '.join(keywords)}\n")
+                    csv_buffer.write("\n".join(urls))  # URL リストを改行区切りで追加
+                    
+                    # ダウンロードボタン
                     st.download_button(
                         label="CSVダウンロード",
                         data=csv_buffer.getvalue(),
